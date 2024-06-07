@@ -5,14 +5,15 @@
 
 float mouseX, mouseY;
 
-int isMouseInside(SDL_FRect *rect);
-void test();
-
 typedef struct {
   SDL_FRect area;
   char text[21];
   void (*action)();
 } Button;
+
+void renderButtonText(Button *btn);
+int isMouseInside(SDL_FRect *rect);
+void test();
 
 int main()
 {
@@ -51,7 +52,7 @@ int main()
   startButton.area.y = 250;
 
   startButton.action = &test;
-  strcpy(startButton.text, "0000");
+  strcpy(startButton.text, "start:");
 
   SDL_Event event;
   SDL_bool isRunning = SDL_TRUE;
@@ -77,7 +78,7 @@ int main()
     SDL_SetRenderDrawColor(renderer, 255, 0, 255, 100);
     SDL_RenderFillRect(renderer, &startButton.area);
 
-    renderText(startButton.text, startButton.area.x, startButton.area.y, startButton.area.w);
+    renderButtonText(&startButton);
 
     SDL_RenderPresent(renderer);
   }
@@ -100,4 +101,15 @@ int isMouseInside(SDL_FRect *rect)
       rect->y < mouseY && rect->y + rect->h > mouseY)
     return 1;
   return 0;
+}
+
+void renderButtonText(Button *btn)
+{
+  int textLength = strlen(btn->text);
+  int textPxLength = 32 / 2 * textLength;
+
+  int textDrawX = btn->area.x + (btn->area.w - textPxLength) / 2;
+  int textDrawY = btn->area.y + (btn->area.h - 32) / 2;
+
+  renderText(btn->text, textDrawX, textDrawY, btn->area.w);
 }

@@ -71,6 +71,7 @@ void quitTextRenderer()
   IMG_Quit();
 }
 
+//man.....
 void selectChar(char letter)
 {
   switch (letter) {
@@ -113,6 +114,114 @@ void selectChar(char letter)
     case '9':
       characterRect.x = characterSize * 9;
       characterRect.y = characterSize * 1;
+      break;
+    case ':':
+      characterRect.x = characterSize * 10;
+      characterRect.y = characterSize * 1;
+      break;
+    case 'a':
+      characterRect.x = characterSize * 1;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'b':
+      characterRect.x = characterSize * 2;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'c':
+      characterRect.x = characterSize * 3;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'd':
+      characterRect.x = characterSize * 4;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'e':
+      characterRect.x = characterSize * 5;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'f':
+      characterRect.x = characterSize * 6;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'g':
+      characterRect.x = characterSize * 7;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'h':
+      characterRect.x = characterSize * 8;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'i':
+      characterRect.x = characterSize * 9;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'j':
+      characterRect.x = characterSize * 10;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'k':
+      characterRect.x = characterSize * 11;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'l':
+      characterRect.x = characterSize * 12;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'm':
+      characterRect.x = characterSize * 13;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'n':
+      characterRect.x = characterSize * 14;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'o':
+      characterRect.x = characterSize * 15;
+      characterRect.y = characterSize * 2;
+      break;
+    case 'p':
+      characterRect.x = characterSize * 0;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'q':
+      characterRect.x = characterSize * 1;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'r':
+      characterRect.x = characterSize * 2;
+      characterRect.y = characterSize * 3;
+      break;
+    case 's':
+      characterRect.x = characterSize * 3;
+      characterRect.y = characterSize * 3;
+      break;
+    case 't':
+      characterRect.x = characterSize * 4;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'u':
+      characterRect.x = characterSize * 5;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'v':
+      characterRect.x = characterSize * 6;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'w':
+      characterRect.x = characterSize * 7;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'x':
+      characterRect.x = characterSize * 8;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'y':
+      characterRect.x = characterSize * 9;
+      characterRect.y = characterSize * 3;
+      break;
+    case 'z':
+      characterRect.x = characterSize * 10;
+      characterRect.y = characterSize * 3;
       break;
     default:
       characterRect.x = characterSize * 0;
