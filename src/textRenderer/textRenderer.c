@@ -56,7 +56,7 @@ void renderText(char *text, int x, int y, int w)
     selectChar(text[i]);
     SDL_RenderTexture(textRenderer, fontAtlas, &characterRect, &drawRect);
     drawRect.x += drawRect.w;
-    if (drawRect.x > w)
+    if (drawRect.x > x + w)
     {
       drawRect.x = x;
       drawRect.y += drawRect.h;
@@ -222,6 +222,14 @@ void selectChar(char letter)
     case 'z':
       characterRect.x = characterSize * 10;
       characterRect.y = characterSize * 3;
+      break;
+    case '^':
+      characterRect.x = characterSize * 14;
+      characterRect.y = characterSize * 3;
+      break;
+    case '-':
+      characterRect.x = characterSize * 13;
+      characterRect.y = characterSize * 0;
       break;
     default:
       characterRect.x = characterSize * 0;
