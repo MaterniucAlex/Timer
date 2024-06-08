@@ -232,6 +232,10 @@ void selectChar(char letter)
       characterRect.x = characterSize * 13;
       characterRect.y = characterSize * 0;
       break;
+    case '+':
+      characterRect.x = characterSize * 11;
+      characterRect.y = characterSize * 0;
+      break;
     default:
       characterRect.x = characterSize * 0;
       characterRect.y = characterSize * 0;

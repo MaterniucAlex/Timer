@@ -13,6 +13,7 @@ typedef struct {
   char text[21];
   void (*action)();
   SDL_bool isVisible;
+  SDL_bool isHeld;
 } Button;
 
 const int textSize = 32;
@@ -29,14 +30,6 @@ SDL_bool isTimerPaused = SDL_FALSE;
 Button buttonsList[nrOfButtons];
 int timerTextSize, timerTextY;
 
-void minuteUp();
-void minuteDown();
-void hourUp();
-void hourDown();
-void secondUp();
-void secondDown();
-void pause();
-void reset();
 void safeInit(int result);
 void*safeCreate(void *result);
 void renderButtonText(Button *btn);
@@ -83,7 +76,25 @@ int main()
           for(int i = 0; i < nrOfButtons; i++)
           {
             if (isMouseInside(&buttonsList[i].area) && buttonsList[i].isVisible == SDL_TRUE)
-              buttonsList[i].action();
+            {
+              buttonsList[i].isHeld = SDL_TRUE;
+              break;
+            }
+          }
+          break;
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+          SDL_GetMouseState(&mouseX, &mouseY);
+          for(int i = 0; i < nrOfButtons; i++)
+          {
+            if (buttonsList[i].isHeld == SDL_TRUE)
+            {
+              buttonsList[i].isHeld = SDL_FALSE;
+              if (isMouseInside(&buttonsList[i].area) && buttonsList[i].isVisible == SDL_TRUE)
+              {
+                buttonsList[i].action();
+                break;
+              }
+            }
           }
           break;
       }
@@ -129,7 +140,10 @@ void drawButton(SDL_Renderer *renderer, Button *btn)
 {
   if (btn->isVisible == SDL_FALSE) return;
 
-  SDL_SetRenderDrawColor(renderer, 31, 31, 31, 100);
+  if (btn->isHeld == SDL_FALSE)
+    SDL_SetRenderDrawColor(renderer, 31, 31, 31, 100);
+  else 
+    SDL_SetRenderDrawColor(renderer, 11, 11, 11, 100);
   SDL_RenderFillRect(renderer, &btn->area);
   renderButtonText(btn);
   SDL_SetRenderDrawColor(renderer, 200, 200, 200, 100);
@@ -294,23 +308,26 @@ void createButtons()
   startButton.area.x = padding;
   startButton.area.y = screenSize - startButton.area.h - padding;
   startButton.isVisible = SDL_TRUE;
+  startButton.isHeld = SDL_FALSE;
   startButton.action = &changeStateToRunning;
-  strcpy(startButton.text, "start:");
+  strcpy(startButton.text, "start");
 
   timerTextSize = (screenSize - padding * 2) / strlen(timerText) * 2;
   timerTextY    = (screenSize - padding - startButton.area.h - timerTextSize) / 2;
 
   Button minutesUp;
   minutesUp.isVisible = SDL_TRUE;
+  minutesUp.isHeld = SDL_FALSE;
   minutesUp.area.w = padding * 2;
   minutesUp.area.h = padding;
   minutesUp.area.x = (screenSize - minutesUp.area.w) / 2;
   minutesUp.area.y = timerTextY - minutesUp.area.h;
   minutesUp.action = &minuteUp;
-  strcpy(minutesUp.text, "^");
+  strcpy(minutesUp.text, "+");
 
   Button minutesDown;
   minutesDown.isVisible = SDL_TRUE;
+  minutesDown.isHeld = SDL_FALSE;
   minutesDown.area.w = padding * 2;
   minutesDown.area.h = padding;
   minutesDown.area.x = (screenSize - minutesUp.area.w) / 2;
@@ -320,15 +337,17 @@ void createButtons()
 
   Button hoursUp;
   hoursUp.isVisible = SDL_TRUE;
+  hoursUp.isHeld = SDL_FALSE;
   hoursUp.area.w = padding * 2;
   hoursUp.area.h = padding;
   hoursUp.area.x = minutesUp.area.x - padding - hoursUp.area.w;
   hoursUp.area.y = timerTextY - minutesDown.area.h;
   hoursUp.action = &hourUp;
-  strcpy(hoursUp.text, "^");
+  strcpy(hoursUp.text, "+");
 
   Button hoursDown;
   hoursDown.isVisible = SDL_TRUE;
+  hoursDown.isHeld = SDL_FALSE;
   hoursDown.area.w = padding * 2;
   hoursDown.area.h = padding;
   hoursDown.area.x = minutesUp.area.x - padding - hoursUp.area.w;
@@ -338,15 +357,17 @@ void createButtons()
 
   Button secondsUp;
   secondsUp.isVisible = SDL_TRUE;
+  secondsUp.isHeld = SDL_FALSE;
   secondsUp.area.w = padding * 2;
   secondsUp.area.h = padding;
   secondsUp.area.x = minutesUp.area.x + minutesUp.area.w + padding;
   secondsUp.area.y = timerTextY - minutesUp.area.h;
   secondsUp.action = &secondUp;
-  strcpy(secondsUp.text, "^");
+  strcpy(secondsUp.text, "+");
 
   Button secondsDown;
   secondsDown.isVisible = SDL_TRUE;
+  secondsDown.isHeld = SDL_FALSE;
   secondsDown.area.w = padding * 2;
   secondsDown.area.h = padding;
   secondsDown.area.x = minutesDown.area.x + minutesUp.area.w + padding;
@@ -360,6 +381,7 @@ void createButtons()
   pauseButton.area.x = padding;
   pauseButton.area.y = screenSize - startButton.area.h - padding;
   pauseButton.isVisible = SDL_FALSE;
+  pauseButton.isHeld = SDL_FALSE;
   pauseButton.action = &pause;
   strcpy(pauseButton.text, "pause");
 
@@ -369,6 +391,7 @@ void createButtons()
   resetButton.area.x = screenSize - padding - resetButton.area.w;
   resetButton.area.y = screenSize - startButton.area.h - padding;
   resetButton.isVisible = SDL_FALSE;
+  resetButton.isHeld = SDL_FALSE;
   resetButton.action = &reset;
   strcpy(resetButton.text, "reset");
 
