@@ -138,6 +138,8 @@ void drawButton(SDL_Renderer *renderer, Button *btn)
 
 void updateTimer()
 {
+  if (timeLeft < 0) timeLeft = 0;
+
   int secondsLeft = timeLeft % 60;
   int minutesLeft = timeLeft / 60 % 60;
   int hoursLeft   = timeLeft / 3600;
@@ -215,7 +217,6 @@ void minuteUp()
 
 void minuteDown()
 {
-  if (timeLeft > 0)
     timeLeft -= 60;
   updateTimer();
 }
@@ -228,7 +229,6 @@ void hourUp()
 
 void hourDown()
 {
-  if (timeLeft > 0)
     timeLeft -= 3600;
   updateTimer();
 }
@@ -241,7 +241,6 @@ void secondUp()
 
 void secondDown()
 {
-  if (timeLeft > 0)
     timeLeft -= 1;
   updateTimer();
 }
@@ -278,6 +277,7 @@ void changeStateToSetting()
 
 void changeStateToRunning()
 {
+  if (timeLeft == 0) return;
   currentState = RUNNING;
   for(int i = 0; i < 7; i++)
     buttonsList[i].isVisible = SDL_FALSE;

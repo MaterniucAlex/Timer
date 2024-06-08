@@ -29,6 +29,7 @@ void initTextRenderer(SDL_Renderer *rend)
     printf("ERROR LOADING FONT\n");
     return;
   }
+  SDL_SetTextureScaleMode(fontAtlas, SDL_SCALEMODE_NEAREST);
 
   characterRect.w = characterSize / 2.0;
   characterRect.h = characterSize;
