@@ -3,4 +3,5 @@ libs = -lSDL3 -lSDL3_image -lX11 -lm
 
 all:
 	@clear
-	gcc -o app $(files) -Llib -Iinclude $(libs)
+	gcc -o Timer $(files) -Llib -Iinclude $(libs)
+
