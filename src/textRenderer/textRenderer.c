@@ -23,7 +23,7 @@ void initTextRenderer(SDL_Renderer *rend)
   }
 
   textRenderer = rend;
-  fontAtlas = IMG_LoadTexture(rend, "res/ProFontIIxNerdFontMono.png");
+  fontAtlas = IMG_LoadTexture(rend, "res/fonts/ProFontIIxNerdFontMono.png");
   if (fontAtlas == NULL)
   {
     printf("ERROR LOADING FONT\n");

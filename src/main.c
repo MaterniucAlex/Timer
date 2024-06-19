@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "SDL3/SDL.h"
+#include "SDL3_mixer/SDL_mixer.h"
 #include "textRenderer/textRenderer.h"
 
 enum state {
@@ -44,10 +45,24 @@ int main()
 {
 
   safeInit(SDL_Init(SDL_INIT_VIDEO));
+  safeInit(SDL_Init(SDL_INIT_AUDIO));
   safeInit(!IMG_Init(IMG_INIT_PNG));
+  safeInit(!Mix_Init(MIX_INIT_MP3));
+
+  SDL_AudioSpec spec;
+  spec.freq = MIX_DEFAULT_FREQUENCY;
+  spec.format = MIX_DEFAULT_FORMAT;
+  spec.channels = MIX_DEFAULT_CHANNELS;
+
+  safeInit(Mix_OpenAudio(0, NULL));
 
   SDL_Window   *window   = safeCreate(SDL_CreateWindow("Timer", screenSize, screenSize, 0));
   SDL_Renderer *renderer = safeCreate(SDL_CreateRenderer(window, NULL));
+  Mix_Chunk    *click    = Mix_LoadWAV("res/sounds/click.wav");
+  Mix_Chunk    *alarm    = Mix_LoadWAV("res/sounds/alarm.wav");
+  int alarmChannel = -1;
+  int clickChannel = -1;
+  Mix_VolumeChunk(click, 24);
   SDL_SetWindowAlwaysOnTop(window, SDL_TRUE);
 
   initTextRenderer(renderer);
@@ -92,6 +107,10 @@ int main()
               if (isMouseInside(&buttonsList[i].area) && buttonsList[i].isVisible == SDL_TRUE)
               {
                 buttonsList[i].action();
+                if (alarmChannel != -1 && Mix_Playing(alarmChannel))
+                  Mix_HaltChannel(alarmChannel);
+                clickChannel = Mix_PlayChannel(-1, click, 0);
+                if (clickChannel < 0) printf("SOUND COULD NOT BE PLAYED\n");
                 break;
               }
             }
@@ -109,6 +128,8 @@ int main()
         updateTimer();
       }
       if(timeLeft <= 0 && currentState == RUNNING) {
+        alarmChannel = Mix_PlayChannel(-1, alarm, 0);
+        if (alarmChannel) printf("ALARM COULD NOT BE PLAYED\n");
         changeStateToSetting();
       }
     }
@@ -130,8 +151,13 @@ int main()
 
   quitTextRenderer();
 
+  Mix_FreeChunk(click);
+  Mix_FreeChunk(alarm);
+  Mix_CloseAudio();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
+  Mix_Quit();
+  IMG_Quit();
   SDL_Quit();
   return 0;
 }
@@ -208,7 +234,7 @@ void safeInit(int result)
 {
   if (result)
   {
-    printf("ERROR");
+    printf("%s\n", SDL_GetError());
     SDL_Quit();
   }
 }
@@ -217,7 +243,7 @@ void* safeCreate(void *result)
 {
   if (result == NULL)
   {
-    printf("ERROR CREATING");
+    printf("ERROR CREATING\n");
     SDL_Quit();
   }
   return result;
